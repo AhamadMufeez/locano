@@ -99,6 +99,24 @@
             align-items: center;
             text-align: left;
         }
+        .info-card-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 5px;
+            margin: 10px auto;
+        }
+        .info-card {
+            width: 140px;
+            height: 175px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -158,7 +176,50 @@
             
         </div>
 
-        <img src="city-silhouette.jpg" alt="City Silhouette" style="width: 100%; height: auto;">
+        <img src="city-silhouette.png" alt="City Silhouette" style="width: 100%; height: auto;">
+
+        <h1 style="text-align: center;">What is <span style="color: #0982a0;">Locano?</span></h1>
+
+        <p style="text-align: center;">Locano is a next-generation local discovery <br>platform that helps you find, connect, and <br>engage with the best your city has to offer.</p>
+
+
+        <div class="info-card-box">
+        <div class="info-card">
+            <img src="discover.png" alt="Discover Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <h3 style="margin-top: 10px;">Discover</h3>
+            <p>Explore top-rated places, hidden gems, events and more near you.</p>
+        </div>
+        <div class="info-card">
+            <img src="connect.png" alt="Connect Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <h3 style="margin-top: 10px;">Connect</h3>
+            <p>Connect with local businesses and communities that match your interests.</p>
+        </div>
+        </div>
+
+        <div class="info-card-box">
+        <div class="info-card">
+            <img src="engage.png" alt="Engage Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <h3 style="margin-top: 10px;">Engage</h3>
+            <p>Stay updated with events, offers, and happenings in real-time.</p>
+        </div>
+        <div class="info-card">
+            <img src="support-local.png" alt="Support Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <h3 style="margin-top: 10px;">Support Local</h3>
+            <p>Empower the businesses and help your community thrive.</p>
+        </div>
+
     </main>
+
+    <script>
+
+(() => {
+  document.documentElement.style.visibility = "hidden";
+
+  window.addEventListener("load", () => {
+    document.documentElement.style.visibility = "visible";
+  });
+})();
+
+</script>
 </body>
 </html>
