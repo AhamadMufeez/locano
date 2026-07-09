@@ -108,7 +108,8 @@
         }
         .info-card {
             width: 140px;
-            height: 175px;
+            min-height: 175px;
+            height: auto;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -116,6 +117,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+        .info-card p{
+            font-size: 14px;
+            text-align: center;
+            padding: 0 12px;
+            margin: 8px 0 16px;
+            color: #333333;
         }
     </style>
 </head>
@@ -185,7 +193,7 @@
 
         <div class="info-card-box">
         <div class="info-card">
-            <img src="discover.png" alt="Discover Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <img src="search.png" alt="Discover Icon" style="width: 50px; height: auto; margin-top: 20px;">
             <h3 style="margin-top: 10px;">Discover</h3>
             <p>Explore top-rated places, hidden gems, events and more near you.</p>
         </div>
@@ -198,14 +206,15 @@
 
         <div class="info-card-box">
         <div class="info-card">
-            <img src="engage.png" alt="Engage Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <img src="calendar.png" alt="Engage Icon" style="width: 50px; height: auto; margin-top: 20px;">
             <h3 style="margin-top: 10px;">Engage</h3>
             <p>Stay updated with events, offers, and happenings in real-time.</p>
         </div>
         <div class="info-card">
-            <img src="support-local.png" alt="Support Icon" style="width: 50px; height: auto; margin-top: 20px;">
+            <img src="vibranium-shield.png" alt="Support Icon" style="width: 50px; height: auto; margin-top: 20px;">
             <h3 style="margin-top: 10px;">Support Local</h3>
             <p>Empower the businesses and help your community thrive.</p>
+        </div>
         </div>
 
     </main>
