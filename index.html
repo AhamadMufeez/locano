@@ -8,42 +8,19 @@
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            color: #1a1a1a;
-            line-height: 1.5;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-        .city-silhouette {
-            max-width: 980px;
-            margin: 20px auto 0;
-            border-radius: 18px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-        }
-        @media (min-width: 1100px) {
-            .city-silhouette {
-                max-width: 1080px;
-                margin-top: 32px;
-            }
+
         }
         header {
             background-color: #111726;
-            height: 60px;
+            height: 50px;
             color: #fff;
-            padding: 0 24px;
+            padding: 1rem;
+            text-align: center;
             display: flex;
             align-items: center;
         }
@@ -71,7 +48,7 @@
         #hero {
             text-align: left;
             padding: 10px 24px 32px;
-            max-width: 560px;
+            max-width: 480px;
             margin: 0 auto;
         }
 
@@ -90,58 +67,22 @@
             color: #000000;
             margin: 16px 0 0;
         }
-        .hero-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-            margin: 18px auto 0;
-            max-width: 320px;
-        }
-        .button-primary,
-        .button-secondary {
-            width: 100%;
-            max-width: 320px;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-        }
-        .button-primary {
-            background-color: #185767;
-            color: #fff;
-        }
-        .button-secondary {
-            background-color: #fff;
-            color: #185767;
-            border: 1px solid #185767;
-        }
         #trust-bar-box {
             width: 90%;
-            max-width: 820px;
+            height: 100px;
             display: flex;
-            flex-wrap: nowrap;
             justify-content: center;
-            align-items: stretch;
-            gap: 12px;
+            align-items: center;
+            gap: 7px;
             margin: 20px auto;
-            overflow-x: auto;
-            padding-bottom: 4px;
         }
         .trust-bar {
-            min-width: 180px;
+            width: 100px;
             height: 90px;
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 10px;
-            padding: 14px 16px;
-            background: #fff;
-            border-radius: 16px;
-            border: 1px solid #dfe8ea;
-            box-shadow: 0 8px 18px rgba(14, 34, 54, 0.05);
+            gap: 2px;
         }
         .trust-bar-icon {
             width: 42px;
@@ -160,15 +101,13 @@
         }
         .info-card-box {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: row;
             justify-content: center;
-            gap: 12px;
+            gap: 5px;
             margin: 10px auto;
         }
         .info-card {
-            flex: 1 1 220px;
-            min-width: 220px;
-            max-width: 260px;
+            width: 140px;
             min-height: 175px;
             height: auto;
             background-color: #fff;
@@ -186,162 +125,14 @@
             margin: 8px 0 16px;
             color: #333333;
         }
-        .info-card:hover{
-            transform:translateY(-10px) scale(1.03);
-        }
-        .section {
-            max-width: 980px;
-            margin: 0 auto 28px;
-            padding: 0 24px;
-        }
-        .section h2 {
-            font-size: 26px;
-            text-align: center;
-            margin: 0 0 16px;
-            color: #111726;
-        }
-        .section p {
-            text-align: center;
-            color: #4b5560;
-            margin: 0 auto 24px;
-            max-width: 680px;
-            line-height: 1.7;
-        }
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        .feature-card,
-        .testimonial-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid #e1e8eb;
-            box-shadow: 0 8px 20px rgba(10, 20, 34, 0.04);
-        }
-        .feature-card h3,
-        .testimonial-card h3 {
-            margin: 14px 0 10px;
-            font-size: 18px;
-            color: #185767;
-        }
-        .feature-card p,
-        .testimonial-card p {
-            margin: 0;
-            color: #475156;
-            line-height: 1.6;
-        }
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-        }
-        .contact-panel {
-            max-width: 980px;
-            margin: 0 auto 24px;
-            padding: 28px 24px;
-            background: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 18px 40px rgba(10, 20, 34, 0.08);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-        }
-        .contact-card {
-            background: #f6fbfc;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #d9e8ea;
-        }
-        .contact-card h3 {
-            margin: 0 0 10px;
-            color: #185767;
-            font-size: 18px;
-        }
-        .contact-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #185767;
-            color: #fff;
-            font-size: 18px;
-            margin-bottom: 14px;
-        }
-        .contact-card p {
-            margin: 0 0 14px;
-            color: #475156;
-            line-height: 1.6;
-        }
-        .contact-card a {
-            color: #185767;
-            text-decoration: none;
-            font-weight: 700;
-        }
-        .contact-card a:hover {
-            text-decoration: underline;
-        }
-        .footer {
-            text-align: center;
-            padding: 24px 20px 32px;
-            color: #475156;
-            font-size: 15px;
-        }
-        @media (max-width: 780px) {
-            header {
-                justify-content: center;
-                padding: 0 16px;
-            }
-            #hero {
-                padding: 20px 16px 28px;
-                max-width: 100%;
-            }
-            #hero h1 {
-                font-size: 28px;
-            }
-            #hero h3 {
-                font-size: 15px;
-            }
-            button {
-                width: 100% !important;
-                max-width: 320px !important;
-            }
-            .trust-bar {
-                min-width: 160px;
-                justify-content: flex-start;
-            }
-            .contact-panel {
-                padding: 20px 16px;
-                gap: 14px;
-            }
-            .section {
-                padding: 0 16px;
-            }
-        }
-        @media (min-width: 900px) {
-            #hero {
-                max-width: 720px;
-            }
-            .info-card-box {
-                gap: 18px;
-            }
-            .contact-panel {
-                grid-template-columns: repeat(3, minmax(220px, 1fr));
-            }
-        }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <img src="logo.png" alt="LOCANO Logo" width="30" height="30">
-            <h1 style="font-size: 28px; margin: 0; letter-spacing: 1px;">LOCANO</h1>
-        </div>
+        <img src="logo.png" alt="LOCANO Logo" width="30" height="30">
+        <h1 style="font-size: 30px;">LOCANO</h1>
+        <h1 style="margin-left: auto;font-size: 30px;color:#185767">&#9776;</h1>
     </header>
 
     <main>
@@ -354,15 +145,13 @@
         </div>
 
         <div id="hero">
-            <h1>Know Your City,</h1>
-            <h1 style="color: #185767;">On Your Time.</h1>
-            <h3>From lecture halls to late-night eats, Locano helps you find what's around you.<br> Built with students in mind. Useful for everyone.</h3>
+            <h1>The Future of</h1>
+            <h1 style="color: #185767;">Local Discovery.</h1>
+            <h3>Locano connects you with the best places, events, and businesses around you.<br> Smarter. Faster. Local.</h3>
         </div>
 
-        <div class="hero-actions">
-            <button class="button-primary">JOIN THE WAITLIST →</button>
-            <button class="button-secondary" type="button" onclick="document.getElementById('features').scrollIntoView({ behavior: 'smooth' })">EXPLORE FEATURES</button>
-        </div>
+        <button style="display: block; margin: 0 auto; padding: 12px 24px; background-color: #185767; color: #fff; border: none; border-radius: 6px; font-size: 16px; width: 270px;">JOIN THE WAITLIST → </button>
+        <button style="display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px auto; padding: 12px 24px; background-color: #fff; color: #185767; border: 1px solid #185767; border-radius: 6px; font-size: 16px; font-weight: 600; width: 270px;"><span style="display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background-color: #185767; color: #fff; border-radius: 50%; font-size: 9px; padding-left: 2px; box-sizing: border-box;">&#9654;</span> WATCH VIDEO</button>
 
         <div id="trust-bar-box">
 
@@ -371,7 +160,7 @@
                     <img src="lock.png" alt="Icon 1" style="width: 90%; height: auto;">
                 </div>
                 <div class="trust-bar-text">
-                    <p>Your data stays private.</p>
+                    <p>Your data is safe with us.</p>
                 </div>
             </div>
 
@@ -380,7 +169,7 @@
                     <img src="share.png" alt="Icon 1" style="width: 90%; height: auto;">
                 </div>
                 <div class="trust-bar-text">
-                    <p>Only useful updates, no spam.</p>
+                    <p>No spam, only updates.</p>
                 </div>
             </div>
 
@@ -389,110 +178,48 @@
                     <img src="shield.png" alt="Icon 1" style="width: 90%; height: auto;">
                 </div>
                 <div class="trust-bar-text">
-                    <p>Opt out anytime.</p>
+                    <p>Unsubscribe anytime.</p>
                 </div>
             </div>
             
         </div>
 
-        <img class="city-silhouette" src="city-silhouette.png" alt="City Silhouette" style="width: 100%; height: auto;">
+        <img src="city-silhouette.png" alt="City Silhouette" style="width: 100%; height: auto;">
 
         <h1 style="text-align: center;">What is <span style="color: #0982a0;">Locano?</span></h1>
 
-        <p style="text-align: center;">Locano is a local information system built for <br>daily life — helping students and residents find <br>what matters, right when it matters.</p>
+        <p style="text-align: center;">Locano is a next-generation local discovery <br>platform that helps you find, connect, and <br>engage with the best your city has to offer.</p>
 
 
         <div class="info-card-box">
         <div class="info-card">
             <img src="search.png" alt="Discover Icon" style="width: 50px; height: auto; margin-top: 20px;">
-            <h3 style="margin-top: 10px;">Find</h3>
-            <p>Study spots, eateries, and things happening near campus or anywhere in your city.</p>
+            <h3 style="margin-top: 10px;">Discover</h3>
+            <p>Explore top-rated places, hidden gems, events and more near you.</p>
         </div>
         <div class="info-card">
             <img src="connect.png" alt="Connect Icon" style="width: 50px; height: auto; margin-top: 20px;">
             <h3 style="margin-top: 10px;">Connect</h3>
-            <p>Get matched with local businesses and groups that fit your routine and interests.</p>
+            <p>Connect with local businesses and communities that match your interests.</p>
         </div>
         </div>
 
         <div class="info-card-box">
         <div class="info-card">
             <img src="calendar.png" alt="Engage Icon" style="width: 50px; height: auto; margin-top: 20px;">
-            <h3 style="margin-top: 10px;">Stay Updated</h3>
-            <p>Real-time updates on events, deals, and things worth knowing about.</p>
+            <h3 style="margin-top: 10px;">Engage</h3>
+            <p>Stay updated with events, offers, and happenings in real-time.</p>
         </div>
         <div class="info-card">
             <img src="vibranium-shield.png" alt="Support Icon" style="width: 50px; height: auto; margin-top: 20px;">
             <h3 style="margin-top: 10px;">Support Local</h3>
-            <p>Support the businesses that keep your city — and campus life — running.</p>
+            <p>Empower the businesses and help your community thrive.</p>
         </div>
         </div>
-
-        <section class="section" id="features">
-            <h2>Discover smarter city life</h2>
-            <p>From study sessions to weekend plans, Locano helps you discover the best local options with confidence and speed.</p>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Campus-focused guides</h3>
-                    <p>Curated recommendations for student hotspots, quiet study corners, and late-night essentials.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Live updates</h3>
-                    <p>Receive quick alerts for campus events, pop-up offers, and nearby happenings.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Local insider tips</h3>
-                    <p>Find the best hidden gems and trusted favorites in your neighborhood without the guesswork.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" style="background: #f6fbfc;">
-            <h2>What people are saying</h2>
-            <p>Early users love Locano for helping them explore their city faster and stay connected to local experiences.</p>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <p>"Locano made it easy to find the best study cafes near campus. It feels like a local guide in my pocket."</p>
-                    <h3>– Maya, student</h3>
-                </div>
-                <div class="testimonial-card">
-                    <p>"The event alerts helped me discover new places and weekend activities I would have missed otherwise."</p>
-                    <h3>– Ajay, resident</h3>
-                </div>
-            </div>
-        </section>
-
-        <section class="section contact-panel" id="contact">
-            <div class="contact-card">
-                <div class="contact-badge">☎</div>
-                <h3>Talk to support</h3>
-                <p>Have a question about Locano or want help before launch? Our team is ready to assist.</p>
-                <a href="tel:+919187008478">+91 91870 08478</a>
-            </div>
-            <div class="contact-card">
-                <div class="contact-badge">✉</div>
-                <h3>Send us a note</h3>
-                <p>Reach out by email and we’ll reply with the latest updates and launch details.</p>
-                <a href="mailto:locano.in@gmail.com">locano.in@gmail.com</a>
-            </div>
-            <div class="contact-card">
-                <div class="contact-badge"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram" style="width:20px; height:20px; filter: invert(1);"></div>
-                <h3>Follow Locano</h3>
-                <p>Join our Instagram community for launch news, local stories, and student-focused recommendations.</p>
-                <a href="https://www.instagram.com/locano.in" target="_blank" rel="noreferrer">@locano.in</a>
-            </div>
-        </section>
 
     </main>
 
-    <footer class="footer">
-        <small>Ready to explore your city? Join the waitlist now and be first to launch.</small>
-    </footer>
-
     <script>
-    
-    
-    
 
 (() => {
   document.documentElement.style.visibility = "hidden";
