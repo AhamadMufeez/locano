@@ -299,3 +299,63 @@
         font-size: 13px;
     }
 }
+
+@media (min-width: 769px) {
+    main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px 40px;
+    }
+
+    #hero {
+        max-width: 760px;
+        padding: 40px 24px 24px;
+    }
+
+    #hero h1 {
+        font-size: 48px;
+    }
+
+    #hero h3 {
+        font-size: 20px;
+        text-align: center;
+        max-width: 680px;
+        margin: 20px auto 0;
+    }
+
+    #trust-bar-box {
+        width: min(100%, 780px);
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 28px auto 32px;
+    }
+
+    .trust-bar {
+        width: 180px;
+        justify-content: center;
+    }
+
+    .trust-bar-text {
+        width: auto;
+        height: auto;
+        font-size: 13px;
+    }
+
+    img[alt="City Silhouette"] {
+        display: block !important;
+        width: min(100%, 600px) !important;
+        max-width: 600px !important;
+        height: auto !important;
+        margin: 0 auto !important;
+    }
+
+    .info-card-box {
+        max-width: 900px;
+        margin: 10px auto;
+        gap: 20px;
+    }
+
+    .info-card {
+        margin: 20px 10px;
+    }
+}
