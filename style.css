@@ -1,4 +1,12 @@
-        html, body {
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -307,9 +315,13 @@
         padding: 0 24px 40px;
     }
 
+    header {
+        padding: 1rem 2rem;
+    }
+
     #hero {
         max-width: 760px;
-        padding: 40px 24px 24px;
+        padding: 48px 24px 24px;
     }
 
     #hero h1 {
@@ -358,4 +370,10 @@
     .info-card {
         margin: 20px 10px;
     }
+
+    #newsletter {
+        max-width: 760px;
+        margin: 36px auto 0;
+    }
+}
 }
