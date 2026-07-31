@@ -125,7 +125,7 @@
                     <select id="role" name="role" required aria-describedby="role-error">
                         <option value="">Choose your role</option>
                         <option>Student</option>
-                        <option value="Business Owner">Business Owner (owns or runs a business)</option>
+                        <option>Business Owner (owns or runs a business)</option>
                         <option value="Other">Other</option>
                     </select>
                     <p class="error" id="role-error" role="alert"></p>
@@ -155,6 +155,62 @@
             </section>
         </section>
     </main>
-    <script src="registration.js"></script>
+    <script>
+        const form = document.getElementById("waitlist-form");
+        const email = document.getElementById("email");
+        const username = document.getElementById("username");
+        const role = document.getElementById("role");
+        const otherRoleField = document.getElementById("other-role-field");
+        const otherRole = document.getElementById("other-role");
+        const submitButton = document.getElementById("submit-button");
+        const successCard = document.getElementById("success-card");
+        const newsletterConfirmation = document.getElementById("newsletter-confirmation");
+
+        function setError(input, message) {
+            const error = document.getElementById(`${input.id}-error`);
+            error.textContent = message;
+            input.setAttribute("aria-invalid", message ? "true" : "false");
+        }
+
+        function validate(showMessages = false) {
+            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+            const usernameValid = username.value.trim().length > 0;
+            const roleValid = role.value !== "";
+            const otherValid = role.value !== "Other" || otherRole.value.trim().length > 0;
+
+            if (showMessages) {
+                setError(email, email.value.trim() ? (emailValid ? "" : "Please enter a valid email.") : "Email is required.");
+                setError(username, usernameValid ? "" : "Username is required.");
+                setError(role, roleValid ? "" : "Please choose your role.");
+                setError(otherRole, otherValid ? "" : "Please tell us your role.");
+            }
+            submitButton.disabled = !(emailValid && usernameValid && roleValid && otherValid);
+            return emailValid && usernameValid && roleValid && otherValid;
+        }
+
+        [email, username, role, otherRole].forEach((input) => input.addEventListener("input", () => validate(true)));
+        role.addEventListener("change", () => {
+            const isOther = role.value === "Other";
+            otherRoleField.classList.toggle("hidden", !isOther);
+            otherRole.required = isOther;
+            if (!isOther) setError(otherRole, "");
+            validate(true);
+        });
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            if (!validate(true)) return;
+            submitButton.disabled = true;
+            submitButton.classList.add("loading");
+            window.setTimeout(() => {
+                form.classList.add("hidden");
+                newsletterConfirmation.classList.toggle("hidden", !document.getElementById("newsletter").checked);
+                successCard.classList.remove("hidden");
+                successCard.focus();
+            }, 700);
+        });
+
+        validate();
+    </script>
 </body>
 </html>
