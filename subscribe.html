@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Locano Waitlist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        .signup-page {
+            min-height: calc(100vh - 82px);
+            padding: 48px 20px 72px;
+            display: flex;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .signup-shell {
+            width: min(100%, 560px);
+            animation: pageReveal 0.7s ease both;
+        }
+
+        .signup-intro { text-align: center; margin-bottom: 26px; }
+        .signup-intro h2 { margin: 0 0 10px; color: #111726; font: 700 32px/1.2 Manrope, Arial, sans-serif; }
+        .signup-intro h2 span { color: #0982a0; }
+        .signup-intro p { margin: 0; color: #333; font: 400 16px/1.6 Manrope, Arial, sans-serif; }
+
+        .form-card, .success-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 28px;
+        }
+
+        .field { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #111726; font: 700 14px/1.4 Manrope, Arial, sans-serif; }
+        input, select {
+            width: 100%;
+            min-height: 48px;
+            box-sizing: border-box;
+            border: 1px solid #b8c3c8;
+            border-radius: 6px;
+            background: #fff;
+            color: #111726;
+            padding: 12px 14px;
+            font: 400 15px Manrope, Arial, sans-serif;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input:focus, select:focus { outline: 3px solid rgba(9, 130, 160, 0.18); border-color: #0982a0; }
+        input[aria-invalid="true"], select[aria-invalid="true"] { border-color: #b42318; }
+        .error { min-height: 18px; margin: 5px 0 0; color: #b42318; font: 400 12px/1.4 Manrope, Arial, sans-serif; }
+        .hidden { display: none; }
+
+        .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin: 8px 0 4px; }
+        .checkbox-row input { width: 19px; min-height: 19px; margin: 1px 0 0; accent-color: #185767; }
+        .checkbox-row label { margin: 0; font-weight: 600; cursor: pointer; }
+        .helper { margin: 0 0 24px 29px; color: #5d6870; font: italic 12px/1.5 Manrope, Arial, sans-serif; }
+
+        .submit-button, .home-button {
+            width: 100%;
+            min-height: 48px;
+            border: 0;
+            border-radius: 6px;
+            background: #185767;
+            color: #fff;
+            cursor: pointer;
+            font: 700 15px Manrope, Arial, sans-serif;
+            transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+        }
+        .submit-button:hover:not(:disabled), .home-button:hover { background: #124450; transform: translateY(-2px); }
+        .submit-button:active:not(:disabled), .home-button:active { transform: translateY(1px); }
+        .submit-button:disabled { cursor: not-allowed; opacity: 0.5; }
+        .submit-button.loading { position: relative; color: transparent; }
+        .submit-button.loading::after { content: ""; position: absolute; width: 18px; height: 18px; left: calc(50% - 9px); top: calc(50% - 9px); border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .success-card { text-align: center; animation: successReveal 0.45s ease both; }
+        .success-mark { width: 52px; height: 52px; margin: 0 auto 16px; display: grid; place-items: center; border-radius: 50%; background: #d9f2ed; color: #185767; font-size: 26px; }
+        .success-card h2 { margin: 0 0 10px; color: #111726; font: 700 25px Manrope, Arial, sans-serif; }
+        .success-card p { margin: 0 auto 24px; color: #333; font: 400 15px/1.6 Manrope, Arial, sans-serif; }
+
+        @keyframes pageReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes successReveal { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 480px) {
+            .signup-page { padding: 34px 16px 56px; }
+            .signup-intro h2 { font-size: 28px; }
+            .form-card, .success-card { padding: 22px 18px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo.png" alt="LOCANO Logo" width="30" height="30">
+        <h1 style="font-size: 30px;">LOCANO</h1>
+        <h1 style="margin-left: auto;font-size: 30px;color:#185767">&#9776;</h1>
+    </header>
+
+
+    <main class="signup-page">
+        <section class="signup-shell" aria-labelledby="signup-title">
+            <div class="signup-intro">
+                <h2 id="signup-title">Join the <span>Locano</span> waitlist</h2>
+                <p>Be among the first to discover what's happening around you.</p>
+            </div>
+
+            <form class="form-card" id="waitlist-form" novalidate>
+                <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" placeholder="Enter your email" autocomplete="email" required aria-describedby="email-error">
+                    <p class="error" id="email-error" role="alert"></p>
+                </div>
+
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Choose a username" autocomplete="username" required aria-describedby="username-error">
+                    <p class="error" id="username-error" role="alert"></p>
+                </div>
+
+                <div class="field">
+                    <label for="role">I am joining as</label>
+                    <select id="role" name="role" required aria-describedby="role-error">
+                        <option value="">Choose your role</option>
+                        <option>Student</option>
+                        <option>Business Owner (owns or runs a business)</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <p class="error" id="role-error" role="alert"></p>
+                </div>
+
+                <div class="field hidden" id="other-role-field">
+                    <label for="other-role">Tell us your role</label>
+                    <input id="other-role" name="otherRole" type="text" placeholder="Your role" aria-describedby="other-role-error">
+                    <p class="error" id="other-role-error" role="alert"></p>
+                </div>
+
+                <div class="checkbox-row">
+                    <input id="newsletter" name="newsletter" type="checkbox">
+                    <label for="newsletter">I would also like to receive newsletters, updates, and early feature announcements.</label>
+                </div>
+                <p class="helper">Newsletters are optional, and you can unsubscribe anytime.</p>
+
+                <button class="submit-button" id="submit-button" type="submit" disabled>Join Waitlist</button>
+            </form>
+
+            <section class="success-card hidden" id="success-card" aria-live="polite" tabindex="-1">
+                <div class="success-mark" aria-hidden="true">&#10003;</div>
+                <h2>You're on the waitlist!</h2>
+                <p>Thank you for joining! We'll notify you as soon as early access becomes available.</p>
+                <p class="hidden" id="newsletter-confirmation">You've also subscribed to our newsletter.</p>
+                <a class="home-button" href="index.html" style="display: grid; place-items: center; box-sizing: border-box; text-decoration: none;">Return to Home</a>
+            </section>
+        </section>
+    </main>
+    <script>
+        const form = document.getElementById("waitlist-form");
+        const email = document.getElementById("email");
+        const username = document.getElementById("username");
+        const role = document.getElementById("role");
+        const otherRoleField = document.getElementById("other-role-field");
+        const otherRole = document.getElementById("other-role");
+        const submitButton = document.getElementById("submit-button");
+        const successCard = document.getElementById("success-card");
+        const newsletterConfirmation = document.getElementById("newsletter-confirmation");
+
+        function setError(input, message) {
+            const error = document.getElementById(`${input.id}-error`);
+            error.textContent = message;
+            input.setAttribute("aria-invalid", message ? "true" : "false");
+        }
+
+        function validate(showMessages = false) {
+            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+            const usernameValid = username.value.trim().length > 0;
+            const roleValid = role.value !== "";
+            const otherValid = role.value !== "Other" || otherRole.value.trim().length > 0;
+
+            if (showMessages) {
+                setError(email, email.value.trim() ? (emailValid ? "" : "Please enter a valid email.") : "Email is required.");
+                setError(username, usernameValid ? "" : "Username is required.");
+                setError(role, roleValid ? "" : "Please choose your role.");
+                setError(otherRole, otherValid ? "" : "Please tell us your role.");
+            }
+            submitButton.disabled = !(emailValid && usernameValid && roleValid && otherValid);
+            return emailValid && usernameValid && roleValid && otherValid;
+        }
+
+        [email, username, role, otherRole].forEach((input) => input.addEventListener("input", () => validate(true)));
+        role.addEventListener("change", () => {
+            const isOther = role.value === "Other";
+            otherRoleField.classList.toggle("hidden", !isOther);
+            otherRole.required = isOther;
+            if (!isOther) setError(otherRole, "");
+            validate(true);
+        });
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            if (!validate(true)) return;
+            submitButton.disabled = true;
+            submitButton.classList.add("loading");
+            window.setTimeout(() => {
+                form.classList.add("hidden");
+                newsletterConfirmation.classList.toggle("hidden", !document.getElementById("newsletter").checked);
+                successCard.classList.remove("hidden");
+                successCard.focus();
+            }, 700);
+        });
+
+        validate();
+    </script>
+</body>
+</html>
