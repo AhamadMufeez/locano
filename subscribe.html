@@ -115,9 +115,9 @@
                 </div>
 
                 <div class="field">
-                    <label for="username">Username</label>
-                    <input id="username" name="username" type="text" placeholder="Choose a username" autocomplete="username" required aria-describedby="username-error">
-                    <p class="error" id="username-error" role="alert"></p>
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" placeholder="Enter your name" autocomplete="name" required aria-describedby="name-error">
+                    <p class="error" id="name-error" role="alert"></p>
                 </div>
 
                 <div class="field">
@@ -142,8 +142,9 @@
                     <label for="newsletter">I would also like to receive newsletters, updates, and early feature announcements.</label>
                 </div>
                 <p class="helper">Newsletters are optional, and you can unsubscribe anytime.</p>
+                <p class="error" id="form-error" role="alert"></p>
 
-                <button class="submit-button" id="submit-button" type="submit" disabled>Join Waitlist</button>
+                <button class="submit-button" id="submit-button" type="submit">Join Waitlist</button>
             </form>
 
             <section class="success-card hidden" id="success-card" aria-live="polite" tabindex="-1">
@@ -158,13 +159,17 @@
     <script>
         const form = document.getElementById("waitlist-form");
         const email = document.getElementById("email");
-        const username = document.getElementById("username");
+        const name = document.getElementById("name");
         const role = document.getElementById("role");
         const otherRoleField = document.getElementById("other-role-field");
         const otherRole = document.getElementById("other-role");
+        const newsletter = document.getElementById("newsletter");
         const submitButton = document.getElementById("submit-button");
         const successCard = document.getElementById("success-card");
         const newsletterConfirmation = document.getElementById("newsletter-confirmation");
+        const formError = document.getElementById("form-error");
+
+        const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSepuCalClwTJgBw9wM0XsnV6Bqo2jpABoPmyENT1a-LRmO6uQ/formResponse";
 
         function setError(input, message) {
             const error = document.getElementById(`${input.id}-error`);
@@ -174,21 +179,20 @@
 
         function validate(showMessages = false) {
             const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-            const usernameValid = username.value.trim().length > 0;
+            const nameValid = name.value.trim().length > 0;
             const roleValid = role.value !== "";
             const otherValid = role.value !== "Other" || otherRole.value.trim().length > 0;
 
             if (showMessages) {
                 setError(email, email.value.trim() ? (emailValid ? "" : "Please enter a valid email.") : "Email is required.");
-                setError(username, usernameValid ? "" : "Username is required.");
+                setError(name, nameValid ? "" : "Name is required.");
                 setError(role, roleValid ? "" : "Please choose your role.");
                 setError(otherRole, otherValid ? "" : "Please tell us your role.");
             }
-            submitButton.disabled = !(emailValid && usernameValid && roleValid && otherValid);
-            return emailValid && usernameValid && roleValid && otherValid;
+            return emailValid && nameValid && roleValid && otherValid;
         }
 
-        [email, username, role, otherRole].forEach((input) => input.addEventListener("input", () => validate(true)));
+        [email, name, role, otherRole].forEach((input) => input.addEventListener("input", () => validate(true)));
         role.addEventListener("change", () => {
             const isOther = role.value === "Other";
             otherRoleField.classList.toggle("hidden", !isOther);
@@ -197,17 +201,40 @@
             validate(true);
         });
 
-        form.addEventListener("submit", (event) => {
+        form.addEventListener("submit", async (event) => {
             event.preventDefault();
+            formError.textContent = "";
             if (!validate(true)) return;
             submitButton.disabled = true;
             submitButton.classList.add("loading");
-            window.setTimeout(() => {
+
+            const formData = new FormData();
+            // Google Forms mapping: email -> Email question.
+            formData.set("entry.2133812534", email.value.trim());
+            // Google Forms mapping: name -> Name question.
+            formData.set("entry.1281654931", name.value.trim());
+            // Google Forms mapping: role -> Student/Role question.
+            formData.set("entry.751763456", role.value === "Other" ? otherRole.value.trim() : role.value);
+            // Google Forms mapping: newsletter -> Newsletter/waitlist subscription question.
+            formData.set("entry.1764008777", newsletter.checked ? "Yes" : "No");
+
+            try {
+                await fetch(googleFormUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData
+                });
                 form.classList.add("hidden");
-                newsletterConfirmation.classList.toggle("hidden", !document.getElementById("newsletter").checked);
+                newsletterConfirmation.classList.toggle("hidden", !newsletter.checked);
                 successCard.classList.remove("hidden");
                 successCard.focus();
-            }, 700);
+                form.reset();
+            } catch (error) {
+                formError.textContent = "We couldn't submit your response. Please check your connection and try again.";
+                submitButton.disabled = false;
+            } finally {
+                submitButton.classList.remove("loading");
+            }
         });
 
         validate();
