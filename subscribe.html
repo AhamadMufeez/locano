@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .signup-page {
             min-height: calc(100vh - 82px);
@@ -144,7 +145,7 @@
                 <p class="helper">Newsletters are optional, and you can unsubscribe anytime.</p>
                 <p class="error" id="form-error" role="alert"></p>
 
-                <button class="submit-button" id="submit-button" type="submit">Join Waitlist</button>
+                <button class="submit-button" id="submit-button" type="submit">Continue with Google</button>
             </form>
 
             <section class="success-card hidden" id="success-card" aria-live="polite" tabindex="-1">
@@ -169,37 +170,11 @@
         const newsletterConfirmation = document.getElementById("newsletter-confirmation");
         const formError = document.getElementById("form-error");
 
-        const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSepuCalClwTJgBw9wM0XsnV6Bqo2jpABoPmyENT1a-LRmO6uQ/formResponse";
-        const sheetId = "1oh18M3nz6IEJ6IR75euZzdbZ9AI2llUDa_92e12cnaY";
-        const sheetDataUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
-
-        async function checkDuplicateEmail(value) {
-            const normalizedEmail = value.trim().toLowerCase();
-
-            try {
-                const response = await fetch(sheetDataUrl);
-                if (!response.ok) throw new Error(`Sheet request failed: ${response.status}`);
-
-                const responseText = await response.text();
-                // The gviz endpoint returns JSONP like `/*O_o*/\ngoogle.visualization.Query.setResponse({...});`.
-                // Remove the wrapper (the first 47 characters and final `);`) before parsing the JSON object.
-                const data = JSON.parse(responseText.substring(47, responseText.length - 2));
-                const emailColumnIndex = data.table.cols.findIndex((column) => (
-                    (column.label || "").trim().toLowerCase() === "email"
-                ));
-
-                if (emailColumnIndex === -1) {
-                    throw new Error("No column with the header Email was found");
-                }
-
-                return data.table.rows.some((row) => (
-                    (row.c[emailColumnIndex]?.v || "").toString().trim().toLowerCase() === normalizedEmail
-                ));
-            } catch (error) {
-                console.warn("Could not check the waitlist for a duplicate email. Allowing submission to proceed.", error);
-                return false;
-            }
-        }
+        // Replace these two placeholders with values from Supabase Project Settings > API.
+        const supabaseUrl = "rswnlmqsstqqingsvoft.supabase.com";
+        const supabasePublishableKey = "sb_publishable_wwuMf4k4saintnCw6MFwfA_wcRRmsXh";
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabasePublishableKey);
+        const pendingWaitlistDataKey = "locano-pending-waitlist-data";
 
         function setError(input, message) {
             const error = document.getElementById(`${input.id}-error`);
@@ -235,48 +210,93 @@
             event.preventDefault();
             formError.textContent = "";
             if (!validate(true)) return;
+
+            sessionStorage.setItem(pendingWaitlistDataKey, JSON.stringify({
+                name: name.value.trim(),
+                role: role.value,
+                otherRole: otherRole.value.trim(),
+                newsletter: newsletter.checked
+            }));
             submitButton.disabled = true;
             submitButton.classList.add("loading");
-            submitButton.textContent = "Checking...";
+            submitButton.textContent = "Connecting...";
 
-            if (await checkDuplicateEmail(email.value)) {
-                setError(email, "This email is already registered.");
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: "google",
+                options: { redirectTo: window.location.href }
+            });
+
+            if (error) {
+                formError.textContent = "We couldn't sign you in with Google. Please try again.";
                 submitButton.disabled = false;
                 submitButton.classList.remove("loading");
-                submitButton.textContent = "Join Waitlist";
-                return;
-            }
-
-            const formData = new FormData();
-            // Google Forms mapping: email -> Email question.
-            formData.set("entry.2133812534", email.value.trim());
-            // Google Forms mapping: name -> Name question.
-            formData.set("entry.1281654931", name.value.trim());
-            // Google Forms mapping: role -> Student/Role question.
-            formData.set("entry.751763456", role.value === "Other" ? otherRole.value.trim() : role.value);
-            // Google Forms mapping: newsletter -> Newsletter/waitlist subscription question.
-            formData.set("entry.1764008777", newsletter.checked ? "Yes" : "No");
-
-            try {
-                await fetch(googleFormUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    body: formData
-                });
-                form.classList.add("hidden");
-                newsletterConfirmation.classList.toggle("hidden", !newsletter.checked);
-                successCard.classList.remove("hidden");
-                successCard.focus();
-                form.reset();
-            } catch (error) {
-                formError.textContent = "We couldn't submit your response. Please check your connection and try again.";
-                submitButton.disabled = false;
-            } finally {
-                submitButton.classList.remove("loading");
-                submitButton.textContent = "Join Waitlist";
+                submitButton.textContent = "Continue with Google";
             }
         });
 
+        async function addAuthenticatedUserToWaitlist(user) {
+            const identity = user.identities?.find(({ provider }) => provider === "google");
+            const isVerifiedGoogleEmail = identity?.identity_data?.email_verified !== false
+                && Boolean(user.email_confirmed_at);
+            const verifiedEmail = isVerifiedGoogleEmail ? user.email?.trim().toLowerCase() : "";
+
+            if (!verifiedEmail) {
+                throw new Error("Google did not return a verified email address.");
+            }
+
+            let pendingData = {};
+            try {
+                pendingData = JSON.parse(sessionStorage.getItem(pendingWaitlistDataKey) || "{}");
+            } catch (error) {
+                console.warn("Could not restore the pending waitlist details.", error);
+            }
+
+            const { error } = await supabaseClient
+                .from("waitlist")
+                .insert({
+                    email: verifiedEmail,
+                    name: pendingData.name || null,
+                    role: pendingData.role === "Other" ? pendingData.otherRole || "Other" : pendingData.role || null,
+                    newsletter: Boolean(pendingData.newsletter)
+                });
+
+            if (error && error.code !== "23505") throw error;
+
+            sessionStorage.removeItem(pendingWaitlistDataKey);
+            form.classList.add("hidden");
+            newsletterConfirmation.classList.toggle("hidden", !pendingData.newsletter);
+            successCard.classList.remove("hidden");
+            successCard.focus();
+            form.reset();
+        }
+
+        async function handleAuthenticatedUser() {
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            if (error) {
+                formError.textContent = "We couldn't verify your sign-in. Please try again.";
+                return;
+            }
+            if (!session?.user) return;
+
+            submitButton.disabled = true;
+            submitButton.classList.add("loading");
+            submitButton.textContent = "Joining...";
+            try {
+                await addAuthenticatedUserToWaitlist(session.user);
+            } catch (error) {
+                console.error("Waitlist insertion failed.", error);
+                formError.textContent = "We couldn't add you to the waitlist. Please try again.";
+                submitButton.disabled = false;
+                submitButton.classList.remove("loading");
+                submitButton.textContent = "Continue with Google";
+            }
+        }
+
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === "SIGNED_IN" && session?.user) handleAuthenticatedUser();
+        });
+
+        handleAuthenticatedUser();
         validate();
     </script>
 </body>
