@@ -170,6 +170,36 @@
         const formError = document.getElementById("form-error");
 
         const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSepuCalClwTJgBw9wM0XsnV6Bqo2jpABoPmyENT1a-LRmO6uQ/formResponse";
+        const sheetId = "1oh18M3nz6IEJ6IR75euZzdbZ9AI2llUDa_92e12cnaY";
+        const sheetDataUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+
+        async function checkDuplicateEmail(value) {
+            const normalizedEmail = value.trim().toLowerCase();
+
+            try {
+                const response = await fetch(sheetDataUrl);
+                if (!response.ok) throw new Error(`Sheet request failed: ${response.status}`);
+
+                const responseText = await response.text();
+                // The gviz endpoint returns JSONP like `/*O_o*/\ngoogle.visualization.Query.setResponse({...});`.
+                // Remove the wrapper (the first 47 characters and final `);`) before parsing the JSON object.
+                const data = JSON.parse(responseText.substring(47, responseText.length - 2));
+                const emailColumnIndex = data.table.cols.findIndex((column) => (
+                    (column.label || "").trim().toLowerCase() === "email"
+                ));
+
+                if (emailColumnIndex === -1) {
+                    throw new Error("No column with the header Email was found");
+                }
+
+                return data.table.rows.some((row) => (
+                    (row.c[emailColumnIndex]?.v || "").toString().trim().toLowerCase() === normalizedEmail
+                ));
+            } catch (error) {
+                console.warn("Could not check the waitlist for a duplicate email. Allowing submission to proceed.", error);
+                return false;
+            }
+        }
 
         function setError(input, message) {
             const error = document.getElementById(`${input.id}-error`);
@@ -207,6 +237,15 @@
             if (!validate(true)) return;
             submitButton.disabled = true;
             submitButton.classList.add("loading");
+            submitButton.textContent = "Checking...";
+
+            if (await checkDuplicateEmail(email.value)) {
+                setError(email, "This email is already registered.");
+                submitButton.disabled = false;
+                submitButton.classList.remove("loading");
+                submitButton.textContent = "Join Waitlist";
+                return;
+            }
 
             const formData = new FormData();
             // Google Forms mapping: email -> Email question.
@@ -234,6 +273,7 @@
                 submitButton.disabled = false;
             } finally {
                 submitButton.classList.remove("loading");
+                submitButton.textContent = "Join Waitlist";
             }
         });
 
